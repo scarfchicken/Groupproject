@@ -68,6 +68,17 @@ function resetGameState() {
         balls.push(createRandomBall(ballRadius, Ball));
     }
 
+
+    // This function returns a randomly colored ball in a random position on the canvas
+    // and draws it on the canvas
+    function createRandomBall() {
+        let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+        let y = Math.floor((canvas.height - 2 * ballRadius - 150) * Math.random() + ballRadius) + 150;
+        let r = Math.floor(256 * Math.random());
+        let g = Math.floor(256 * Math.random());
+        let b = Math.floor(256 * Math.random());
+        let ball = new Ball(x, y, ballRadius, `rgb(${r}, ${g}, ${b})`);
+
     function createRandomBall(ballRadius, Ball) {
         let ball;
         let overlaps;
@@ -80,6 +91,7 @@ function resetGameState() {
             ball = new Ball(x, y, ballRadius, `rgb(${r}, ${g}, ${b})`);
             overlaps = balls.some(existingBall => ball.overlaps(existingBall));
         } while (overlaps);
+
 
         ball.draw();
         return ball;
