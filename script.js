@@ -12,13 +12,17 @@ let clawOpen = true;
 let moveLeft = false;
 let moveRight = false;
 let dropClaw = false;
+let gameStarted = false;
 
 startButton.addEventListener('click', startGame);
 document.addEventListener('keydown', keyDownHandler);
 document.addEventListener('keyup', keyUpHandler);
 
 function startGame() {
-    setInterval(update, 20);
+    if (!gameStarted) {
+        gameStarted = true;
+        setInterval(update, 20);
+    }
 }
 
 function keyDownHandler(event) {
@@ -26,7 +30,7 @@ function keyDownHandler(event) {
         moveLeft = true;
     } else if (event.key === 'ArrowRight') {
         moveRight = true;
-    } else if (event.key === ' ') {
+    } else if (event.key === 'Space') {
         dropClaw = true;
     }
 }
@@ -36,10 +40,9 @@ function keyUpHandler(event) {
         moveLeft = false;
     } else if (event.key === 'ArrowRight') {
         moveRight = false;
+    } else if (event.key === 'Space') {
+        dropClaw = false;
     }
-    // } else if (event.key === ' ') {
-    //     dropClaw = false;
-    // }
 }
 
 function update() {
