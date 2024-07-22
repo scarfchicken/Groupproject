@@ -7,18 +7,23 @@ let craneY = 50;
 let craneWidth = 100;
 let craneHeight = 20;
 let clawWidth = 20;
-let clawHeight = 20;
+let clawHeight = 50;
 let clawOpen = true;
 let moveLeft = false;
 let moveRight = false;
 let dropClaw = false;
+let gameStart = false;
 
 startButton.addEventListener('click', startGame);
 document.addEventListener('keydown', keyDownHandler);
 document.addEventListener('keyup', keyUpHandler);
 
 function startGame() {
-    setInterval(update, 20);
+    if(!gameStart){
+        gameStart = true;
+        setInterval(update, 20);
+    }
+    
 }
 
 function keyDownHandler(event) {
@@ -62,6 +67,18 @@ function update() {
 
 function drawCrane() {
     ctx.fillStyle = '#000';
-    ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
-    ctx.fillRect(craneX + craneWidth / 2 - clawWidth / 2, craneY + craneHeight, clawWidth, clawHeight);
+    if(clawOpen){
+        ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+        ctx.fillRect(craneX , craneY + craneHeight, clawWidth, clawHeight);
+        ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+        
+    }
+    else{
+        ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+        ctx.fillRect(craneX , craneY + craneHeight, clawWidth, clawHeight);
+        ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+        ctx.fillRect(craneX + 60, craneY + craneHeight+clawHeight, clawWidth+20, craneHeight);
+        ctx.fillRect(craneX, craneY + craneHeight + clawHeight, clawWidth+20, craneHeight);
+        
+    }
 }
