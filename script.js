@@ -16,6 +16,7 @@ let moveRight = false;
 let dropClaw = false;
 let clawDropping = false;
 
+
 let gameStarted = false;
 let gameInterval;
 
@@ -26,26 +27,7 @@ startButton.addEventListener('click', startGame);
 document.addEventListener('keydown', keyDownHandler);
 document.addEventListener('keyup', keyUpHandler);
 
-function startGame() {
-    if (score > bestScore) {
-        bestScore = score;
-        updateBestScore();
-    }
-    resetGameState();
-    if (!gameStarted) {
-        gameStarted = true;
-        gameInterval = setInterval(update, 20);
-    }
-}
-
-function resetGameState() {
-    craneX = canvas.width / 2;
-    craneY = 50;
-    moveLeft = false;
-    moveRight = false;
-    dropClaw = false;
-    clawDropping = false;
-
+function createBalls(){
     balls = [];
     score = 0;
     updateScore();
@@ -100,8 +82,101 @@ function resetGameState() {
 
         ball.draw();
         return ball;
+}
+}
+
+function checkCollision() {
+    for (let i = balls.length - 1; i >= 0; i--) {
+        const ball = balls[i];
+        if (craneY + craneHeight + clawHeight >= ball.y && craneY + craneHeight <= ball.y + ball.radius && craneX <= ball.x + ball.radius && craneX + craneWidth >= ball.x) {
+            score += ball.points;
+            balls.splice(i, 1);
+            updateScore();
+        }
     }
 }
+
+
+
+function startGame() {
+    if (score > bestScore) {
+        bestScore = score;
+        updateBestScore();
+    }
+    resetGameState();
+    createBalls();
+    if (!gameStarted) {
+        gameStarted = true;
+        gameInterval = setInterval(update, 20);
+        
+        
+    }
+}
+
+function resetGameState() {
+    craneX = canvas.width / 2;
+    craneY = 50;
+    moveLeft = false;
+    moveRight = false;
+    dropClaw = false;
+    clawDropping = false;
+
+    // balls = [];
+    // score = 0;
+    // updateScore();
+
+    // let ballRadius = 20;
+    // class Ball {
+    //     constructor(x, y, radius, color, points) {
+    //         this.x = x;
+    //         this.y = y;
+    //         this.radius = radius;
+    //         this.color = color;
+    //         this.points = points;
+    //     }
+    //     draw() {
+    //         ctx.fillStyle = this.color;
+    //         ctx.beginPath();
+    //         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    //         ctx.fill();
+    //         ctx.fillStyle = '#000';
+    //         ctx.font = '12px Arial';
+    //         ctx.fillText(this.points, this.x - 6, this.y + 4);
+    //     }
+    //     overlaps(otherBall) {
+    //         const dx = this.x - otherBall.x;
+    //         const dy = this.y - otherBall.y;
+    //         const distance = Math.sqrt(dx * dx + dy * dy);
+    //         return distance < this.radius + otherBall.radius;
+    //     }
+    // }
+
+    // const colorsAndPoints = [
+    //     { color: 'red', points: 1 },
+    //     { color: 'blue', points: 2 },
+    //     { color: 'green', points: 3 },
+    //     { color: 'yellow', points: 4 },
+    //     { color: 'purple', points: 5 }
+    // ];
+
+    // for (let i = 0; i < 10; i++) {
+    //     balls.push(createRandomBall(ballRadius, Ball, colorsAndPoints[i % colorsAndPoints.length]));
+    // }
+
+    // function createRandomBall(ballRadius, Ball, colorAndPoints) {
+    //     let ball;
+    //     let overlaps;
+    //     do {
+    //         let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+    //         let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+    //         ball = new Ball(x, y, ballRadius, colorAndPoints.color, colorAndPoints.points);
+    //         overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+    //     } while (overlaps);
+
+    //     ball.draw();
+    //     return ball;
+}
+
 
 function keyDownHandler(event) {
     if (!clawDropping) {
@@ -127,7 +202,6 @@ function keyUpHandler(event) {
 function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawCrane();
-    checkCollision();
 
     if (moveLeft && craneX > 0) {
         craneX -= 5;
@@ -142,9 +216,11 @@ function update() {
             clawDropping = false;
             if (craneY + craneHeight + clawHeight >= canvas.height) {
                 // Claw touches the bottom, restart the game
-                gameStarted = false;
-                clearInterval(gameInterval);
-                startGame();
+                // gameStarted = false;
+                // clearInterval(gameInterval);
+                // resetGameState();\
+                craneX = canvas.width /2;
+                craneY = 50;
                 return;
             }
         }
@@ -152,7 +228,10 @@ function update() {
         craneY = 50;
     }
 
-    balls.forEach(ball => ball.draw());
+    for(ball of balls){
+        ball.draw();
+    }
+    checkCollision();
 
     if (balls.length === 0) {
         clearInterval(gameInterval);
@@ -186,18 +265,7 @@ function drawCrane() {
     }
 }
 
-let balls = [];
 
-function checkCollision() {
-    for (let i = balls.length - 1; i >= 0; i--) {
-        const ball = balls[i];
-        if (craneY + craneHeight + clawHeight >= ball.y && craneY + craneHeight <= ball.y + ball.radius && craneX <= ball.x + ball.radius && craneX + craneWidth >= ball.x) {
-            score += ball.points;
-            balls.splice(i, 1);
-            updateScore();
-        }
-    }
-}
 
 function updateScore() {
     scoreDisplay.textContent = score;
@@ -206,3 +274,5 @@ function updateScore() {
 function updateBestScore() {
     bestScoreDisplay.textContent = bestScore;
 }
+
+let balls = [];
