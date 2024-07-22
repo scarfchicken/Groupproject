@@ -184,7 +184,7 @@ function startGame() {
     // and draws it on the canvas
     function createRandomBall() {
         let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
-        let y = Math.floor((canvas.height - 2 * ballRadius) * Math.random() + ballRadius);
+        let y = Math.floor((canvas.height - 2 * ballRadius - 150) * Math.random() + ballRadius) + 150;
         let r = Math.floor(256 * Math.random());
         let g = Math.floor(256 * Math.random());
         let b = Math.floor(256 * Math.random());
