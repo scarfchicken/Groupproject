@@ -42,7 +42,8 @@ function resetGameState() {
     balls = [];
 
     // Create new balls
-    let ballRadius = 20;
+    let ballRadius = 35;
+    const gap = 30;
     class Ball {
         constructor(x, y, radius, color) {
             this.x = x;
@@ -56,30 +57,19 @@ function resetGameState() {
             ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
             ctx.fill();
         }
-        overlaps(otherBall) {
+        overlaps(otherBall, gap) {
             const dx = this.x - otherBall.x;
             const dy = this.y - otherBall.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            return distance < this.radius + otherBall.radius;
+            return distance < this.radius + otherBall.radius + gap;
         }
     }
 
     for (let i = 0; i < 10; i++) {
-        balls.push(createRandomBall(ballRadius, Ball));
+        balls.push(createRandomBall(ballRadius, Ball, gap));
     }
 
-
-    // This function returns a randomly colored ball in a random position on the canvas
-    // and draws it on the canvas
-    function createRandomBall() {
-        let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
-        let y = Math.floor((canvas.height - 2 * ballRadius - 150) * Math.random() + ballRadius) + 150;
-        let r = Math.floor(256 * Math.random());
-        let g = Math.floor(256 * Math.random());
-        let b = Math.floor(256 * Math.random());
-        let ball = new Ball(x, y, ballRadius, `rgb(${r}, ${g}, ${b})`);
-
-    function createRandomBall(ballRadius, Ball) {
+    function createRandomBall(ballRadius, Ball, gap) {
         let ball;
         let overlaps;
         do {
@@ -89,9 +79,8 @@ function resetGameState() {
             let g = Math.floor(256 * Math.random());
             let b = Math.floor(256 * Math.random());
             ball = new Ball(x, y, ballRadius, `rgb(${r}, ${g}, ${b})`);
-            overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+            overlaps = balls.some(existingBall => ball.overlaps(existingBall, gap));
         } while (overlaps);
-
 
         ball.draw();
         return ball;
@@ -127,7 +116,7 @@ function update() {
         craneX += 5;
     }
     if (dropClaw && craneY < canvas.height - clawHeight) {
-        craneY += 5;
+        craneY += 1;
     } else {
         craneY = 50;
         dropClaw = false;
