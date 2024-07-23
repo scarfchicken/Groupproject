@@ -33,6 +33,28 @@ function createBalls() {
     score = 0;
     updateScore();
 
+    let timeLeft = 30;
+
+    document.getElementById("TimeLeft").textContent = "Time left: " + timeLeft.toString();
+
+ 
+
+    let timer = setInterval(decrementTime, 1000);
+
+    function decrementTime() {
+
+        timeLeft = timeLeft - 1;
+
+        if (timeLeft < 1) {
+
+            timeLeft = "Time's Up!";
+
+            clearInterval(timer);
+
+        }
+
+        document.getElementById("TimeLeft").textContent = "Time left: " + timeLeft.toString();
+    }
     let ballRadius = 20;
 
     class Ball {
@@ -66,6 +88,7 @@ function createBalls() {
             const distance = Math.sqrt(dx * dx + dy * dy);
             return distance < this.radius + otherBall.radius;
         }
+
     }
 
     const colorsAndPoints = [
@@ -139,11 +162,11 @@ function startGame() {
     resetGameState();
     createBalls();
     createMovingBomb();
-
+``
     if (!gameStarted) {
         gameStarted = true;
         gameInterval = setInterval(update, 20);
-        startButton.disabled = true;
+        startButton.style.display = "none";
     }
 }
 
@@ -222,7 +245,7 @@ function update() {
     if (balls.length === 0) {
         clearInterval(gameInterval);
         gameStarted = false;
-        startButton.disabled = false;
+        startButton.style.display= "block";
         ctx.fillText("Game Over! All balls collected!", canvas.width / 2 - 100, canvas.height / 2);
 
         if (score > bestScore) {
