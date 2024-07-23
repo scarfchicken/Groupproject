@@ -205,6 +205,8 @@ function update() {
     } else if (clawRising) {
         craneY -= 5;
         clawDropping = false;
+        moveRight = false;
+        moveLeft = false;
     }
 
     for (let ball of balls) {
