@@ -137,6 +137,18 @@ function checkCollision() {
         }
     }
 }
+function autoBallCheckCollision() {
+    for (let i = balls.length - 1; i >= 0; i--) {
+        const ball = balls[i];
+        if (autoBall.y + autoBall.radius >= ball.y &&
+            autoBall.y + autoBall.radius <= ball.y + ball.radius &&
+            autoBall.x <= ball.x + ball.radius &&
+            autoBall.x + autoBall.radius >= ball.x) {
+            score += ball.points;
+            balls.splice(i, 1);
+        }
+    }
+}
 
 function checkCollisionWhile() {
     let i = balls.length - 1;
@@ -386,7 +398,7 @@ function createAutoMovingBall() {
         }
     }
 
-    autoBall = new Ball(50, 50, 5, 10, 25, "violet");
+    autoBall = new Ball(50, 50, 1, 2, 15, "violet");
     running = true;
     moveBalls();
 
@@ -399,12 +411,8 @@ function createAutoMovingBall() {
         if (autoBall.y > canvas.height - autoBall.radius || autoBall.y < autoBall.radius) {
             autoBall.dy = -autoBall.dy;
         }
-        if (autoBall.checkPlayerCollisionBox()) {
-            score += 15;
-            updateScore();
-            bombs = bombs.filter(bomb => bomb !== this);
-            resetClaw = true;
-        }
+        autoBallCheckCollision()
+            
     }
 
     function moveBalls() {
