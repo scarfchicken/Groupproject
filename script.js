@@ -20,6 +20,7 @@ let clawRising = false;
 let gameStarted = false;
 let gameInterval;
 let autoBallRaf;
+let timer; // Declare timer variable here
 
 let score = 0;
 let bestScore = 0;
@@ -35,13 +36,17 @@ document.addEventListener('keydown', keyDownHandler);
 document.addEventListener('keyup', keyUpHandler);
 
 function createBalls() {
+    if (timer) { // Clear any existing timer
+        clearInterval(timer);
+    }
+    
     balls = [];
     score = 0;
     updateScore();
 
     let timeLeft = 60;
     document.getElementById("TimeLeft").textContent = "Time left: " + timeLeft.toString();
-    let timer = setInterval(decrementTime, 1000);
+    timer = setInterval(decrementTime, 1000);
 
     function decrementTime() {
         timeLeft -= 1;
@@ -165,6 +170,7 @@ function startGame() {
         startButton.style.display = "none";
         startButton.removeEventListener('click', startGame);
     }
+
 }
 
 function resetGameState() {
@@ -249,6 +255,7 @@ function update() {
     checkCollision();
     if (balls.length === 0) {
         clearInterval(gameInterval);
+        clearInterval(timer); // Clear timer when all balls are collected
         gameStarted = false;
         startButton.style.display = "block";
         startButton.addEventListener('click', startGame);
@@ -408,5 +415,4 @@ function createAutoMovingBall() {
         raf = window.requestAnimationFrame(moveBalls);
     }
 
-    autoBallRaf = raf; // store the raf ID
 }
