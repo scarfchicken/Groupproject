@@ -1,31 +1,35 @@
-body {
-    background-color: #f0f0f0;
-    font-family: 'Arial', sans-serif;
-    display: flex;
+/* body {
+    background-image: url(background.jpg);
+    background-repeat: no-repeat;
+    background-size: 1200px 850px;
+    background-position-x: center;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+} */
+
+body{
+    background-color: #e8e2e2;
+}
+    
+.container {
+    position: relative;
+    margin:auto;
+    width: fit-content
 }
 
-.container {
-    text-align: center;
-    background-color: #ffffff;
-    border: 5px solid #333;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
+
 
 h1 {
     color: #333;
 }
 
 canvas {
-    border: 5px solid #333;
-    border-radius: 10px;
-    background: #e0e0e0 url('https://example.com/claw-machine-bg.jpg') no-repeat center center;
-    background-size: cover;
+    height: 443px;
+    position: absolute;
+    top: 167px;
+    left: 300px;
 }
 
 button {
@@ -36,7 +40,8 @@ button {
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 3px;
+    margin-left: 1px;
 }
 
 button:hover {
@@ -44,6 +49,38 @@ button:hover {
 }
 
 p {
-    font-size: 18px;
-    color: #333;
+    font-size: 20px;
+    color: rgb(200, 71, 92);
+    font-weight: bolder;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+    /* margin-top: -200px;
+    margin-left: -200px; */
+}
+
+#text {
+    font-size: 20px;
+    color: rgb(200, 71, 92);
+    font-weight: bolder;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+
+}
+/* :disabled {
+background-color: #999;
+cursor: not-allowed;
+} */
+button{
+    background-color: pink;
+    position:absolute;
+    top: 83.5%;
+    left:50.5%;
+    transform: translate(-50%,-50%);
+}
+
+#text {
+    position: absolute;
+    top: 170px;
+    left: 320px;
+    /* font-size: 24px; */
+    /* color: red;
+    font-weight: bold; */
 }
