@@ -1,89 +1,983 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas Animation</title>
-</head>
-<body>
-    <canvas id="canvas" style="border: 1px solid black" width="300" height="300"></canvas>
-    <script>
-        let canvas = document.getElementById("canvas");
-        let ctx = canvas.getContext("2d");
-        let ballRadius = 20;
-        class Ball {
-            //These are the ball properties
-            constructor(x, y, radius, color) {
-                this.x = x;
-                this.y = y;
-                this.radius = radius;
-                this.color = color;
+<!-- // window.onload = function() {
+    //     var content = document.getElementById('gameCanvas');
+    //     var maxMoveX = content.clientWidth - 20;
+    //     var maxMoveY = content.clientHeight - 20;
+    //     var timer = null;
+    //     var ballList = [];
+    
+    //     //0. 公共方法(随机创建)
+    //     function random(type) {
+    //         switch(type){
+    //             case 'color': 
+    //                 return "black";
+    //             case 'top':
+    //                 return Math.floor(Math.random()*280) + 'px';
+    //             case 'left':
+    //                 return Math.floor(Math.random()*280) + 'px';
+    //             case 'speed':
+    //                 return Math.floor((Math.random() - 0.5)*20);
+    //             default: 
+    //                 return false;
+    //         }
+    //     }
+    //     //1. 创建小球
+    //     function createBall(num){
+    //         var p = null;
+    //         for(var i=0; i < num; i++){
+    //             p = document.createElement('p');
+    //             p.innerHTML = i + 1;
+    //             p.style.background = random('color');
+    //             p.style.color = '#fff';
+    //             p.style.top = random('top');
+    //             p.style.left = random('left');
+    //             p.style['textAlign'] = 'center';
+    //             p.id = 'ball' + i;
+    //             content.appendChild(p);
+    //             ballList.push(p);
+    //             moveBall(p);
+    //         }
+    //     }
+    //     //2. 移动小球
+    //     function moveBall(ball, startSX, startSY) {
+    //         var speedX = 5,
+    //             speedY = 5,
+    //             ballMoveX = null,
+    //             speedObj = {},
+    //             ballMoveY = null;
+    //         timer = setInterval(function(){
+    //             ballMoveY = ball.offsetTop + speedY;
+    //             ballMoveX = ball.offsetLeft + speedX;
+    //             if(ballMoveX >= maxMoveX || ballMoveX <= 0){
+    //                 speedX = -speedX;
+    //             }
+    //             if(ballMoveY >= maxMoveY || ballMoveY <= 0){
+    //                 speedY = -speedY;
+    //             }
+    //             ball.style.top = ballMoveY + 'px';
+    //             ball.style.left = ballMoveX + 'px';
+    //             speedObj = crashBall(ball, speedX, speedY);
+    //             speedX = speedObj.speedX;
+    //             speedY = speedObj.speedY;
+    //         }, 30)
+    //     }
+    //     //3. 处理小球间的碰撞
+    //     function crashBall(ball, speedX, speedY) {
+    //         var speedObj = {};
+    //         for(var i = 0; i<ballList.length; i++){
+    //             //自己不跟自己比较
+    //             if(ball.id !== ballList[i].id && Math.abs(ball.offsetLeft - ballList[i].offsetLeft) <= 20 && Math.abs(ball.offsetTop - ballList[i].offsetTop) <= 20){
+    //                 //**********对象小球在碰撞小球方位的8个情况***********
+    //                 //左上方
+    //                 if(ball.offsetLeft < ballList[i].offsetLeft && ball.offsetTop < ballList[i].offsetTop){
+    //                     speedX > 0 && (speedX = -speedX);
+    //                     speedY > 0 && (speedY = -speedY);
+    //                 }
+    //                 //正上方（不会影响水平运动的速度）
+    //                 if(ball.offsetLeft === ballList[i].offsetLeft && ball.offsetTop < ballList[i].offsetTop){
+    //                     speedY > 0 && (speedY = -speedY);
+    //                 }
+    //                 //右上方
+    //                 if(ball.offsetLeft > ballList[i].offsetLeft && ball.offsetTop < ballList[i].offsetTop){
+    //                     speedX < 0 && (speedX = -speedX);
+    //                     speedY > 0 && (speedY = -speedY);
+    //                 }
+    //                 //正右方
+    //                 if(ball.offsetLeft > ballList[i].offsetLeft && ball.offsetTop === ballList[i].offsetTop){
+    //                     speedX < 0 && (speedX = -speedX);
+    //                 }
+    //                 //右下方
+    //                 if(ball.offsetLeft > ballList[i].offsetLeft && ball.offsetTop > ballList[i].offsetTop){
+    //                     speedX < 0 && (speedX = -speedX);
+    //                     speedY < 0 && (speedY = -speedY);
+    //                 }
+    //                 //正下方
+    //                 if(ball.offsetLeft === ballList[i].offsetLeft && ball.offsetTop > ballList[i].offsetTop){
+    //                     speedY < 0 && (speedY = -speedY);
+    //                 }
+    //                 //左下方
+    //                 if(ball.offsetLeft < ballList[i].offsetLeft && ball.offsetTop > ballList[i].offsetTop){
+    //                     speedX > 0 && (speedX = -speedX);
+    //                     speedY < 0 && (speedY = -speedY);
+    //                 }
+    //                 //正左方
+    //                 if(ball.offsetLeft < ballList[i].offsetLeft && ball.offsetTop === ballList[i].offsetTop){
+    //                     speedX > 0 && (speedX = -speedX);
+    //                 }
+    //             }
+    //         }
+    //         speedObj.speedX = speedX;
+    //         speedObj.speedY = speedY;
+    //         return speedObj;
+    //     }
+    //     createBall(3);
+    // }
+    
+        // balls = [];
+        // score = 0;
+        // updateScore();
+    
+        // let ballRadius = 20;
+        // class Ball {
+        //     constructor(x, y, radius, color, points) {
+        //         this.x = x;
+        //         this.y = y;
+        //         this.radius = radius;
+        //         this.color = color;
+        //         this.points = points;
+        //     }
+        //     draw() {
+        //         ctx.fillStyle = this.color;
+        //         ctx.beginPath();
+        //         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        //         ctx.fill();
+        //         ctx.fillStyle = '#000';
+        //         ctx.font = '12px Arial';
+        //         ctx.fillText(this.points, this.x - 6, this.y + 4);
+        //     }
+        //     overlaps(otherBall) {
+        //         const dx = this.x - otherBall.x;
+        //         const dy = this.y - otherBall.y;
+        //         const distance = Math.sqrt(dx * dx + dy * dy);
+        //         return distance < this.radius + otherBall.radius;
+        //     }
+        // }
+    
+        // const colorsAndPoints = [
+        //     { color: 'red', points: 1 },
+        //     { color: 'blue', points: 2 },
+        //     { color: 'green', points: 3 },
+        //     { color: 'yellow', points: 4 },
+        //     { color: 'purple', points: 5 }
+        // ];
+    
+        // for (let i = 0; i < 10; i++) {
+        //     balls.push(createRandomBall(ballRadius, Ball, colorsAndPoints[i % colorsAndPoints.length]));
+        // }
+    
+        // function createRandomBall(ballRadius, Ball, colorAndPoints) {
+        //     let ball;
+        //     let overlaps;
+        //     do {
+        //         let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+        //         let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+        //         ball = new Ball(x, y, ballRadius, colorAndPoints.color, colorAndPoints.points);
+        //         overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+        //     } while (overlaps);
+    
+        //     ball.draw();
+        //     return ball; -->
+
+    <!-- //Jul 22 Version
+    // const canvas = document.getElementById('gameCanvas');
+// const ctx = canvas.getContext('2d');
+// const startButton = document.getElementById('startButton');
+// const scoreDisplay = document.getElementById('score');
+// const bestScoreDisplay = document.getElementById('bestScore');
+
+// let craneX = canvas.width / 2;
+// let craneY = 50;
+// const craneWidth = 100;
+// const craneHeight = 20;
+// const clawWidth = 20;
+// const clawHeight = 50;
+// let clawOpen = true;
+// let moveLeft = false;
+// let moveRight = false;
+// let dropClaw = false;
+// let clawDropping = false;
+
+
+// let gameStarted = false;
+// let gameInterval;
+
+// let score = 0;
+// let bestScore = 0;
+
+// startButton.addEventListener('click', startGame);
+// document.addEventListener('keydown', keyDownHandler);
+// document.addEventListener('keyup', keyUpHandler);
+
+// function createBalls(){
+//     balls = [];
+//     score = 0;
+//     updateScore();
+
+//     let ballRadius = 20;
+//     class Ball {
+//         constructor(x, y, radius, color, points) {
+//             this.x = x;
+//             this.y = y;
+//             this.radius = radius;
+//             this.color = color;
+//             this.points = points;
+//         }
+//         draw() {
+//             ctx.fillStyle = this.color;
+//             ctx.beginPath();
+//             ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+//             ctx.fill();
+//             ctx.font = '12px Arial';
+//             //New stuff
+//             if(this.color === '#000' || this.color.toLowerCase() === 'black'){
+//                 ctx.fillStyle = '#FF0000';
+//                 ctx.fillText("Bomb", this.x - 15, this.y + 4);
+//             }
+//             else{
+//                 ctx.fillStyle = '#000';
+//                 ctx.fillText(this.points, this.x - 6, this.y + 4);
+//             }
+//         }
+//         overlaps(otherBall) {
+//             const dx = this.x - otherBall.x;
+//             const dy = this.y - otherBall.y;
+//             const distance = Math.sqrt(dx * dx + dy * dy);
+//             return distance < this.radius + otherBall.radius;
+//         }
+//     }
+
+//     const colorsAndPoints = [
+//         { color: 'red', points: 1 },
+//         { color: 'blue', points: 2 },
+//         { color: 'green', points: 3 },
+//         { color: 'yellow', points: 4 },
+//         { color: 'purple', points: 5 }
+//     ];
+
+//     for (let i = 0; i < 20; i++) {
+//         balls.push(createRandomBall(ballRadius, Ball, colorsAndPoints[i % colorsAndPoints.length]));
+//     }
+
+//     function createRandomBall(ballRadius, Ball, colorAndPoints) {
+//         let ball;
+//         let overlaps;
+//         do {
+//             let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+//             let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+//             ball = new Ball(x, y, ballRadius, colorAndPoints.color, colorAndPoints.points);
+//             overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+//         } while (overlaps);
+
+//         ball.draw();
+//         return ball;
+// }
+// }
+
+// function checkCollision() {
+//     for (let i = balls.length - 1; i >= 0; i--) {
+//         const ball = balls[i];
+//         if (craneY + craneHeight + clawHeight >= ball.y && craneY + craneHeight <= ball.y + ball.radius && craneX <= ball.x + ball.radius && craneX + craneWidth >= ball.x) {
+//             score += ball.points;
+//             balls.splice(i, 1);
+//             updateScore();
+//         }
+//     }
+// }
+
+
+
+// function startGame() {
+//     if (score > bestScore) {
+//         bestScore = score;
+//         updateBestScore();
+//     }
+//     resetGameState();
+//     createBalls();
+//     createMovingBomb();
+//     if (!gameStarted) {
+//         gameStarted = true;
+//         gameInterval = setInterval(update, 20);
+        
+        
+//     }
+// }
+
+// function resetGameState() {
+//     craneX = canvas.width / 2;
+//     craneY = 50;
+//     moveLeft = false;
+//     moveRight = false;
+//     dropClaw = false;
+//     clawDropping = false;
+// }
+
+
+// function keyDownHandler(event) {
+//     if (!clawDropping) {
+//         if (event.key === 'ArrowLeft') {
+//             moveLeft = true;
+//         } else if (event.key === 'ArrowRight') {
+//             moveRight = true;
+//         } else if (event.key === ' ') {
+//             dropClaw = true;
+//             clawDropping = true;
+//         }
+//     }
+// }
+
+// function keyUpHandler(event) {
+//     if (event.key === 'ArrowLeft') {
+//         moveLeft = false;
+//     } else if (event.key === 'ArrowRight') {
+//         moveRight = false;
+//     }
+// }
+
+// function update() {
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
+//     drawCrane();
+
+//     if (moveLeft && craneX > 0) {
+//         craneX -= 5;
+//     }
+//     if (moveRight && craneX < canvas.width - craneWidth) {
+//         craneX += 5;
+//     }
+//     if (clawDropping) {
+//         if (craneY < canvas.height - clawHeight) {
+//             craneY += 5;
+//         } else {
+//             clawDropping = false;
+//             if (craneY + craneHeight + clawHeight >= canvas.height) {
+//                 // Claw touches the bottom, restart the game
+//                 // gameStarted = false;
+//                 // clearInterval(gameInterval);
+//                 // resetGameState();\
+//                 craneX = canvas.width /2;
+//                 craneY = 50;
+//                 return;
+//             }
+//         }
+//     } else if (!dropClaw) {
+//         craneY = 50;
+//     }
+
+//     for(let ball of balls){
+//         ball.draw();
+//     }
+
+//     for (let bomb of bombs) { // 更新函数中调用炸弹移动函数
+//         bomb.move();
+//     }
+
+//     checkCollision();
+
+//     if (balls.length === 0) {
+//         clearInterval(gameInterval);
+//         gameStarted = false;
+//         ctx.fillText("Game Over! All balls collected!", canvas.width / 2 - 100, canvas.height / 2);
+//         if (score > bestScore) {
+//             bestScore = score;
+//             updateBestScore();
+//         }
+//     }
+// }
+
+// function drawCrane() {
+//     ctx.fillStyle = '#000';
+//     // Draw the line holding the claw
+//     ctx.beginPath();
+//     ctx.moveTo(craneX + craneWidth / 2, 0);
+//     ctx.lineTo(craneX + craneWidth / 2, craneY);
+//     ctx.stroke();
+    
+//     if (clawOpen) {
+//         ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+//         ctx.fillRect(craneX, craneY + craneHeight, clawWidth, clawHeight);
+//         ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+//     } else {
+//         ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+//         ctx.fillRect(craneX, craneY + craneHeight, clawWidth, clawHeight);
+//         ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+//         ctx.fillRect(craneX + 60, craneY + craneHeight + clawHeight, clawWidth + 20, craneHeight);
+//         ctx.fillRect(craneX, craneY + craneHeight + clawHeight, clawWidth + 20, craneHeight);
+//     }
+// }
+
+
+
+// function updateScore() {
+//     scoreDisplay.textContent = score;
+// }
+
+// function updateBestScore() {
+//     bestScoreDisplay.textContent = bestScore;
+// }
+
+// let balls = [];
+// let bombs = [];
+
+// //Moving Bomb
+// function createMovingBomb(){
+//     function createBalls(){
+//         balls = [];
+//         score = 0;
+//         updateScore();
+
+//         let ballRadius = 20;
+//         class Bomb {
+//             constructor(x, y, radius, color, points) {
+//                 this.x = x;
+//                 this.y = y;
+//                 this.radius = radius;
+//                 this.color = color;
+//                 this.points = points;
+//             }
+//             draw() {
+//                 ctx.fillStyle = this.color;
+//                 ctx.beginPath();
+//                 ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+//                 ctx.fill();
+//                 ctx.font = '12px Arial';
+//                 ctx.fillStyle = '#FF0000';
+//                 ctx.fillText("Bomb", this.x - 15, this.y + 4);
+//             }
+
+//             move() {
+//                 this.y += 1; // 让炸弹移动
+//                 if (this.y > canvas.height) {
+//                     this.y = 0; // 超出边界后重置位置
+//                 }
+//                 this.draw();
+//             }
+
+//             overlaps(otherBall) {
+//                 const dx = this.x - otherBall.x;
+//                 const dy = this.y - otherBall.y;
+//                 const distance = Math.sqrt(dx * dx + dy * dy);
+//                 return distance < this.radius + otherBall.radius;
+//             }
+//         }
+
+//         const colorsAndPoints = [
+//             { color: 'black', points: -15}
+//         ];
+
+//         // for (let i = 0; i < 5; i++) {
+//         //     balls.push(createRandomBall(ballRadius, Bomb, colorsAndPoints[i % colorsAndPoints.length]));
+//         // }
+
+//         function createRandomBall(ballRadius, Bomb, colorAndPoints) {
+//             let ball;
+//             let overlaps;
+//             do {
+//                 let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+//                 let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+//                 ball = new Bomb(x, y, ballRadius, colorAndPoints.color, colorAndPoints.points);
+//                 overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+//             } while (overlaps);
+
+//             ball.draw();
+//             return ball;
+//     }
+//     }
+//         for (let i = 0; i < 5; i++) {
+//             let bomb;
+//             let overlaps;
+//             do {
+//                 let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+//                 let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+//                 bomb = new Bomb(x, y, ballRadius, 'black', -1);
+//                 overlaps = bombs.some(existingBomb => bomb.overlaps(existingBomb));
+//             } while (overlaps);
+
+//             bombs.push(bomb); // 将炸弹添加到炸弹数组中
+//     }
+// } -->
+
+
+
+<!-- Jul23 Morning
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const startButton = document.getElementById('startButton');
+const scoreDisplay = document.getElementById('score');
+const bestScoreDisplay = document.getElementById('bestScore');
+
+let craneX = canvas.width / 2;
+let craneY = 50;
+const craneWidth = 100;
+const craneHeight = 20;
+const clawWidth = 20;
+const clawHeight = 50;
+let clawOpen = true;
+let moveLeft = false;
+let moveRight = false;
+let dropClaw = false;
+let clawDropping = false;
+
+
+let gameStarted = false;
+let gameInterval;
+
+let score = 0;
+let bestScore = 0;
+
+startButton.addEventListener('click', startGame);
+document.addEventListener('keydown', keyDownHandler);
+document.addEventListener('keyup', keyUpHandler);
+
+function createBalls(){
+    balls = [];
+    score = 0;
+    updateScore();
+
+    let ballRadius = 20;
+    class Ball {
+        constructor(x, y, radius, color, points) {
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.color = color;
+            this.points = points;
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = '#000';
+            ctx.font = '12px Arial';
+            ctx.fillText(this.points, this.x - 6, this.y + 4);
+        }
+        overlaps(otherBall) {
+            const dx = this.x - otherBall.x;
+            const dy = this.y - otherBall.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            return distance < this.radius + otherBall.radius;
+        }
+    }
+
+    const colorsAndPoints = [
+        { color: 'red', points: 1 },
+        { color: 'blue', points: 2 },
+        { color: 'green', points: 3 },
+        { color: 'yellow', points: 4 },
+        { color: 'purple', points: 5 }
+    ];
+
+    for (let i = 0; i < 10; i++) {
+        balls.push(createRandomBall(ballRadius, Ball, colorsAndPoints[i % colorsAndPoints.length]));
+    }
+
+    function createRandomBall(ballRadius, Ball, colorAndPoints) {
+        let ball;
+        let overlaps;
+        do {
+            let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+            let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+            ball = new Ball(x, y, ballRadius, colorAndPoints.color, colorAndPoints.points);
+            overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+        } while (overlaps);
+
+        ball.draw();
+        return ball;
+}
+}
+
+function checkCollision() {
+    for (let i = balls.length - 1; i >= 0; i--) {
+        const ball = balls[i];
+        if (craneY + craneHeight + clawHeight >= ball.y && craneY + craneHeight <= ball.y + ball.radius && craneX <= ball.x + ball.radius && craneX + craneWidth >= ball.x) {
+            score += ball.points;
+            balls.splice(i, 1);
+            updateScore();
+        }
+    }
+}
+
+
+
+function startGame() {
+    if (score > bestScore) {
+        bestScore = score;
+        updateBestScore();
+    }
+    resetGameState();
+    createBalls();
+    if (!gameStarted) {
+        gameStarted = true;
+        gameInterval = setInterval(update, 20);
+        startButton.disabled = 'true';
+    }
+}
+
+function resetGameState() {
+    craneX = canvas.width / 2;
+    craneY = 50;
+    moveLeft = false;
+    moveRight = false;
+    dropClaw = false;
+    clawDropping = false;
+
+    // balls = [];
+    // score = 0;
+    // updateScore();
+
+    // let ballRadius = 20;
+    // class Ball {
+    //     constructor(x, y, radius, color, points) {
+    //         this.x = x;
+    //         this.y = y;
+    //         this.radius = radius;
+    //         this.color = color;
+    //         this.points = points;
+    //     }
+    //     draw() {
+    //         ctx.fillStyle = this.color;
+    //         ctx.beginPath();
+    //         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    //         ctx.fill();
+    //         ctx.fillStyle = '#000';
+    //         ctx.font = '12px Arial';
+    //         ctx.fillText(this.points, this.x - 6, this.y + 4);
+    //     }
+    //     overlaps(otherBall) {
+    //         const dx = this.x - otherBall.x;
+    //         const dy = this.y - otherBall.y;
+    //         const distance = Math.sqrt(dx * dx + dy * dy);
+    //         return distance < this.radius + otherBall.radius;
+    //     }
+    // }
+
+    // const colorsAndPoints = [
+    //     { color: 'red', points: 1 },
+    //     { color: 'blue', points: 2 },
+    //     { color: 'green', points: 3 },
+    //     { color: 'yellow', points: 4 },
+    //     { color: 'purple', points: 5 }
+    // ];
+
+    // for (let i = 0; i < 10; i++) {
+    //     balls.push(createRandomBall(ballRadius, Ball, colorsAndPoints[i % colorsAndPoints.length]));
+    // }
+
+    // function createRandomBall(ballRadius, Ball, colorAndPoints) {
+    //     let ball;
+    //     let overlaps;
+    //     do {
+    //         let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+    //         let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+    //         ball = new Ball(x, y, ballRadius, colorAndPoints.color, colorAndPoints.points);
+    //         overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+    //     } while (overlaps);
+
+    //     ball.draw();
+    //     return ball;
+}
+
+
+function keyDownHandler(event) {
+    if (!clawDropping) {
+        if (event.key === 'ArrowLeft') {
+            moveLeft = true;
+        } else if (event.key === 'ArrowRight') {
+            moveRight = true;
+        } else if (event.key === ' ') {
+            dropClaw = true;
+            clawDropping = true;
+        }
+    }
+}
+
+function keyUpHandler(event) {
+    if (event.key === 'ArrowLeft') {
+        moveLeft = false;
+    } else if (event.key === 'ArrowRight') {
+        moveRight = false;
+    }
+}
+
+function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawCrane();
+
+    if (moveLeft && craneX > 0) {
+        craneX -= 5;
+    }
+    if (moveRight && craneX < canvas.width - craneWidth) {
+        craneX += 5;
+    }
+    if (clawDropping) {
+        if (craneY < canvas.height - clawHeight) {
+            craneY += 5;
+        } else {
+            clawDropping = false;
+            if (craneY + craneHeight + clawHeight >= canvas.height) {
+                
+                craneY = 50;
+                return;
             }
-            //This method will draw the ball on the canvas as specified by its properties
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-                ctx.fill();
-            }
         }
-        let balls = [];
-        //create 20 random balls and put them in the balls array
-        for(let i = 0; i < 20; i++) {
-            balls.push(createRandomBall());
+    } else if (!dropClaw) {
+        craneY = 50;
+    }
+
+    for(ball of balls){
+        ball.draw();
+    }
+    checkCollision();
+
+    if (balls.length === 0) {
+        clearInterval(gameInterval);
+        gameStarted = false;
+        startButton.disabled = false;
+        ctx.fillText("Game Over! All balls collected!", canvas.width / 2 - 100, canvas.height / 2);
+        if (score > bestScore) {
+            bestScore = score;
+            updateBestScore();
         }
-        //this function returns a randomly colored ball in a random position on the canvas
-        //and draws it on the canvas
-        function createRandomBall() {
-            let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + 20);
-            let y = Math.floor((canvas.height - 2 * ballRadius) * Math.random() + 20);
-            let r = Math.floor(256 * Math.random());
-            let g = Math.floor(256 * Math.random());
-            let b = Math.floor(256 * Math.random());
-            let ball = new Ball(x, y, ballRadius, "rgb(" + r + ", " + g + ", " + b + ")");
-            ball.draw();
-            return ball;
-        }
-        document.addEventListener('keydown', moveBall, false);
-        function moveBall(event) {
-            //clear the drawing canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            //use the EVENT to record which key was pressed
-            let key = event.key;
-            //loop through each ball of the balls array
-            for(let ball of balls) {
-                //if the user pressed the right arrow, the ball should move to the right
-                    //If the ball goes past the right border, it should go back to the left border
-                if(key == "ArrowRight") {
-                    ball.x = (ball.x + 5) % canvas.width;
-                }
-                //if the user pressed the left arrow, the ball should move to the left
-                    //If the ball goes past the left border, it should go back to the right border
-                if(key == "ArrowLeft") {
-                    ball.x = ball.x - 5;
-                    if(ball.x < 0) {
-                        ball.x = canvas.width;
-                    }
-                }
-                //if the user pressed the up arrow, the ball should move up
-                    //If the ball goes past the top border, it should go back to the bottom border
-                if(key == "ArrowUp") {
-                    ball.y = ball.y - 5;
-                    if(ball.y < 0) {
-                        ball.y = canvas.height;
-                    }
-                }
-                //if the user pressed the down arrow, the ball should move down
-                    //If the ball goes past the bottom border, it should go back to the top border
-                if(key == "ArrowDown") {
-                    ball.y = (ball.y + 5) % canvas.height;
-                }
-                //draw the ball using its draw() method
-                ball.draw();
-            }
-        }
-    </script> 
-</body>
-</html>
+    }
+}
+
+function drawCrane() {
+    ctx.fillStyle = '#000';
+    // Draw the line holding the claw
+    ctx.beginPath();
+    ctx.moveTo(craneX + craneWidth / 2, 0);
+    ctx.lineTo(craneX + craneWidth / 2, craneY);
+    ctx.stroke();
+    
+    if (clawOpen) {
+        ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+        ctx.fillRect(craneX, craneY + craneHeight, clawWidth, clawHeight);
+        ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+    } else {
+        ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+        ctx.fillRect(craneX, craneY + craneHeight, clawWidth, clawHeight);
+        ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+        ctx.fillRect(craneX + 60, craneY + craneHeight + clawHeight, clawWidth + 20, craneHeight);
+        ctx.fillRect(craneX, craneY + craneHeight + clawHeight, clawWidth + 20, craneHeight);
+    }
+}
+
+
+
+function updateScore() {
+    scoreDisplay.textContent = score;
+}
+
+function updateBestScore() {
+    bestScoreDisplay.textContent = bestScore;
+}
+
+let balls = []; -->
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const startButton = document.getElementById('startButton');
+const scoreDisplay = document.getElementById('score');
+const bestScoreDisplay = document.getElementById('bestScore');
+
+let craneX = canvas.width / 2;
+let craneY = 50;
+const craneWidth = 100;
+const craneHeight = 20;
+const clawWidth = 20;
+const clawHeight = 50;
+let clawOpen = true;
+let moveLeft = false;
+let moveRight = false;
+let dropClaw = false;
+let clawDropping = false;
+let clawRising = false;
+
+
+let gameStarted = false;
+let gameInterval;
+
+let score = 0;
+let bestScore = 0;
+
+startButton.addEventListener('click', startGame);
+document.addEventListener('keydown', keyDownHandler);
+document.addEventListener('keyup', keyUpHandler);
+
+function createBalls(){
+balls = [];
+score = 0;
+updateScore();
+
+let ballRadius = 20;
+class Ball {
+constructor(x, y, radius, color, points) {
+this.x = x;
+this.y = y;
+this.radius = radius;
+this.color = color;
+this.points = points;
+}
+draw() {
+ctx.fillStyle = this.color;
+ctx.beginPath();
+ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+ctx.fill();
+ctx.fillStyle = '#000';
+ctx.font = '12px Arial';
+ctx.fillText(this.points, this.x - 6, this.y + 4);
+}
+overlaps(otherBall) {
+const dx = this.x - otherBall.x;
+const dy = this.y - otherBall.y;
+const distance = Math.sqrt(dx * dx + dy * dy);
+return distance < this.radius + otherBall.radius;
+}
+}
+
+const colorsAndPoints = [
+{ color: 'red', points: 1 },
+{ color: 'blue', points: 2 },
+{ color: 'green', points: 3 },
+{ color: 'yellow', points: 4 },
+{ color: 'purple', points: 5 }
+];
+
+for (let i = 0; i < 10; i++) {
+balls.push(createRandomBall(ballRadius, Ball, colorsAndPoints[i % colorsAndPoints.length]));
+}
+
+function createRandomBall(ballRadius, Ball, colorAndPoints) {
+let ball;
+let overlaps;
+do {
+let x = Math.floor((canvas.width - 2 * ballRadius) * Math.random() + ballRadius);
+let y = Math.floor((canvas.height / 2 + ballRadius) + (canvas.height / 2 - 2 * ballRadius) * Math.random() + ballRadius);
+ball = new Ball(x, y, ballRadius, colorAndPoints.color, colorAndPoints.points);
+overlaps = balls.some(existingBall => ball.overlaps(existingBall));
+} while (overlaps);
+
+ball.draw();
+return ball;
+}
+}
+
+function checkCollision() {
+for (let i = balls.length - 1; i >= 0; i--) {
+const ball = balls[i];
+if (craneY + craneHeight + clawHeight >= ball.y && craneY + craneHeight <= ball.y + ball.radius && craneX <= ball.x + ball.radius && craneX + craneWidth >= ball.x) {
+score += ball.points;
+balls.splice(i, 1);
+updateScore();
+}
+}
+}
+
+
+
+function startGame() {
+if (score > bestScore) {
+bestScore = score;
+updateBestScore();
+}
+resetGameState();
+createBalls();
+if (!gameStarted) {
+gameStarted = true;
+gameInterval = setInterval(update, 20);
+}
+}
+
+function resetGameState() {
+craneX = canvas.width / 2;
+craneY = 50;
+moveLeft = false;
+moveRight = false;
+dropClaw = false;
+clawDropping = false;
+}
+
+
+function keyDownHandler(event) {
+if (!clawDropping) {
+if (event.key === 'ArrowLeft') {
+moveLeft = true;
+} else if (event.key === 'ArrowRight') {
+moveRight = true;
+} else if (event.key === ' ') {
+dropClaw = true;
+clawDropping = true;
+}
+}
+}
+
+function keyUpHandler(event) {
+if (event.key === 'ArrowLeft') {
+moveLeft = false;
+} else if (event.key === 'ArrowRight') {
+moveRight = false;
+}
+}
+
+function update() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+drawCrane();
+
+if (moveLeft && craneX > 0) {
+craneX -= 5;
+}
+if (moveRight && craneX < canvas.width - craneWidth) {
+craneX += 5;
+}
+if (clawDropping) {
+if (craneY < canvas.height - clawHeight) {
+craneY += 5;
+} else {
+clawDropping = false;
+clawRising = true;
+}
+} else if (!dropClaw) {
+craneY = 50;
+}
+if(craneY <=50){
+clawRising = false;
+}
+else if(clawRising){
+craneY-=5;
+}
+
+for(ball of balls){
+ball.draw();
+}
+checkCollision();
+
+if (balls.length === 0) {
+clearInterval(gameInterval);
+gameStarted = false;
+ctx.fillText("Game Over! All balls collected!", canvas.width / 2 - 100, canvas.height / 2);
+if (score > bestScore) {
+bestScore = score;
+updateBestScore();
+}
+}
+}
+
+function drawCrane() {
+ctx.fillStyle = '#000';
+// Draw the line holding the claw
+ctx.beginPath();
+ctx.moveTo(craneX + craneWidth / 2, 0);
+ctx.lineTo(craneX + craneWidth / 2, craneY);
+ctx.stroke();
+if (clawOpen) {
+ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+ctx.fillRect(craneX, craneY + craneHeight, clawWidth, clawHeight);
+ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+} else {
+ctx.fillRect(craneX, craneY, craneWidth, craneHeight);
+ctx.fillRect(craneX, craneY + craneHeight, clawWidth, clawHeight);
+ctx.fillRect(craneX + 80, craneY + craneHeight, clawWidth, clawHeight);
+ctx.fillRect(craneX + 60, craneY + craneHeight + clawHeight, clawWidth + 20, craneHeight);
+ctx.fillRect(craneX, craneY + craneHeight + clawHeight, clawWidth + 20, craneHeight);
+}
+}
+
+
+
+function updateScore() {
+scoreDisplay.textContent = score;
+}
+
+function updateBestScore() {
+bestScoreDisplay.textContent = bestScore;
+}
+
+let balls = [];
