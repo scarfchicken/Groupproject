@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crane Game</title>
+    <style type="text/css">
+        html,body {
+            margin: 0;
+            padding: 0;
+        }
+        #content {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #f00;
+            position: relative;
+        }
+        #gameContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #content p {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <img src = "111.png" width = "1200" height="850">
+        <h1> </h1>
+        <p> </p>
+        <canvas id="gameCanvas" width="800" height="580"></canvas>
+        <button id="startButton">Start Game</button>
+        <div id="text">
+            <p>Score: <span id="score">0</span></p>
+            <p>Best Score: <span id="bestScore">0</span></p>
+            <label id="TimeLeft">Time Left:</label>
+        </div>
+
+        <!-- <audio id="myAudio">
+            <source src="path_to_your_audio_file.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio> -->
+    </div>
+     
+    <script src="script.js"></script>
+</body>
+</html>
